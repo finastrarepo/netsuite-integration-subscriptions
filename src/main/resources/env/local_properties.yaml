@@ -1,0 +1,60 @@
+##Http Configuration
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  timeout: "90000"
+###Cron Expression for subscriptions                                              
+# Every 1 Sec# cronExpressionSubscriptions: "0 * * ? * *" 
+cronExpressionSubscriptions: "0 */5 * ? * *" 
+subscriptionSearch: "10074"
+subscriptionItemSearch: "10075"
+
+
+########### Rectype values of NS#########
+
+record-SubId: "456"
+
+####### Netsuite SOAP Integration######### 
+kimbleRestNetsuite:
+  consumerKey: "![mjIJhdTy0kAhv/EbZsfjD4emeTWjISTIL/Rvr31RWMi1R2onV9YAzrQfVR81+KDKuy3Vu9fE1g/s7nOY0q0QbMUCeMO+Pui9HfE2pMXAEnM=]"
+  consumerSecret: "![TKY2UY+5ykNOHev9a2vDi8P1tAhviToEwVCI7BFAIziNMdk1WjyV2o9wb5bNVSNEWpKkAAVUTpXuSV8EeexGIzCb2K5vlqTv6fYyEd08BVE=]"
+  token: "![Ua096EEEo/57NPHqkxvLnztH6pGDMlh2q/XAo/d9EOLvhaxBt/zWtADoKQX6ns+aGlBzGLeDm4Yjm1hi2Jhp7Y1j42M+1uHgOKKCTV2cgXo=]"
+  tokenSecret: "![QXa87VPVhiWQCEqPZLhEr7EDc9M6RaVJXF0vBKpjjIk8LPaLLsxGVOalfg35PL3S+jbsG4ooIo9hi+4FeSrf9DqrWFUJBW7KBOecVuSq0jw=]"
+  realm: "3431250_SB2"
+   
+   
+kimbleSoapNetsuite:
+  consumerKey: "![mjIJhdTy0kAhv/EbZsfjD4emeTWjISTIL/Rvr31RWMi1R2onV9YAzrQfVR81+KDKuy3Vu9fE1g/s7nOY0q0QbMUCeMO+Pui9HfE2pMXAEnM=]"
+  consumerSecret: "![TKY2UY+5ykNOHev9a2vDi8P1tAhviToEwVCI7BFAIziNMdk1WjyV2o9wb5bNVSNEWpKkAAVUTpXuSV8EeexGIzCb2K5vlqTv6fYyEd08BVE=]"
+  token: "![Ua096EEEo/57NPHqkxvLnztH6pGDMlh2q/XAo/d9EOLvhaxBt/zWtADoKQX6ns+aGlBzGLeDm4Yjm1hi2Jhp7Y1j42M+1uHgOKKCTV2cgXo=]"
+  tokenSecret: "![QXa87VPVhiWQCEqPZLhEr7EDc9M6RaVJXF0vBKpjjIk8LPaLLsxGVOalfg35PL3S+jbsG4ooIo9hi+4FeSrf9DqrWFUJBW7KBOecVuSq0jw=]"
+  realm: "3431250_SB2"
+  
+#Netsuite Details:
+netsuite:
+  consumerKey: "![2/yZ5Dpz19jg4Xqf8EzuZLFJEJwgJCb1zcj0Ow2TT9fvdKsq2P0lvyiHN6L8wTOKFsZQ4rXSRyga4pIwe6mrjW14LGGKE1egSqccZVcQ0Q0=]"
+  consumerSecret: "![mGQZ+k6y9jEKGEmjuzdUUhXKXAGZ7KwxlVDMYq7XuFlpTdqdtyihIhU/JxINuyF1r36AbKzvQNkwGbKu6wr5qxiHVNuy/TvrgCDdO97xLj4=]"
+  token: "![rLai+tbAnEv7HGJ2gqlFZOuvhR/UrlL5xCjHsvpSKMDe/ulASei3AEmo5wBvWYECAqcuWBIz3f9mAGT/qtO4EABhW/LoujFZbnAnbg61phc=]"
+  tokenSecret: "![ud+rWuqCZvWBJP5TzdeiHHlkRpxL+ttp0wv/TFPP0Kez12guGzi8LAJhNMe2ERwlGMmjXKDE2iHPstqUykC7xEYMHwrQlbdFXgd+MjecTNo=]"
+#####Netsuite Invoice Values for SOAP request
+soap:
+  wsdlUrl: "https://webservices.netsuite.com/wsdl/v2020_1_0/netsuite.wsdl"
+  wsdlAddress: "https://3431250-sb2.suitetalk.api.netsuite.com/services/NetSuitePort_2020_1"
+  wsdlService: "NetSuiteService"
+  wsdlPort: "NetSuitePort"
+  wsdlTimeout: "600000"
+  account: "3431250_SB2"
+  roleInternalId: "1281"
+  applicationId: "AF5CDD89-BBFA-45D8-81D5-536506817952"
+  algorithm: "HMAC_SHA256"
+  wsdlSearchOperation: "search"
+  wsdlUpdatelistOperation: "updateList"
+##MQ Configuration
+mq-client-id: "![+kn8B5e0VcxqG3ol2pTIch38iqIwfP1d5LgkdjCFLDqvoY979+uzhHt/lEtBetJq]"
+subscription-req-queue: "subscription-req-queue-test"
+subscription-res-queue: "subscription-res-queue"
+ns-subscription-status-queue: "ns-subscription-status-queue"
+mq-redelivery-count: "3"
+mq-total-message: "30"
+mq-url: "https://mq-eu-west-2.anypoint.mulesoft.com/api/v1"
+mq-client-secret: "![KXXP1HhqGKMfRs434q6MMl9P3peSu/pytBG7o24sReqY7DBN98HvqFXsZ/htkyPX]"
