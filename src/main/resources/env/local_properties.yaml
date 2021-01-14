@@ -2,18 +2,18 @@
 http:
   host: "0.0.0.0"
   port: "8081"
-  timeout: "90000"
+  timeout: "190000"
 ###Cron Expression for subscriptions                                              
 # Every 1 Sec# cronExpressionSubscriptions: "0 * * ? * *" 
-cronExpressionSubscriptions: "0 */5 * ? * *" 
+cronExpressionSubscriptions: "0 */10 * ? * *" 
 subscriptionSearch: "10074"
 subscriptionItemSearch: "10075"
+subscriptionUpdateSearch: "10078"
+subscriptionItemUpdateSearch: "10077"
 
 
 ########### Rectype values of NS#########
-
 record-SubId: "456"
-
 ####### Netsuite SOAP Integration######### 
 kimbleRestNetsuite:
   consumerKey: "![mjIJhdTy0kAhv/EbZsfjD4emeTWjISTIL/Rvr31RWMi1R2onV9YAzrQfVR81+KDKuy3Vu9fE1g/s7nOY0q0QbMUCeMO+Pui9HfE2pMXAEnM=]"

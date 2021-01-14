@@ -22,33 +22,56 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		doc:name="HTTP Listener config"
 		doc:id="6c1e7f52-3a45-408f-8b3e-6fbd729e3c5e">
 		<http:listener-connection host="0.0.0.0"
-			port="8081" />
+			port="8081" connectionIdleTimeout="90000" />
 	</http:listener-config>
 	<flow name="Schedule-subscriptions-flow"
 		doc:id="62d3fc7d-1b3e-4ad0-a66f-4a467ac39d9a">
-		<scheduler doc:name="Scheduler For Subscription"
-			doc:id="7a0e0306-df48-4ccf-af73-11ce98c2c851">
-			<scheduling-strategy>
-				<cron expression="${cronExpressionSubscriptions}" />
-			</scheduling-strategy>
-		</scheduler>
+
+
+		<!-- <scheduler doc:name="Scheduler For Subscription" doc:id="7a0e0306-df48-4ccf-af73-11ce98c2c851"> 
+			<scheduling-strategy> <cron expression="${cronExpressionSubscriptions}" /> 
+			</scheduling-strategy> </scheduler> -->
+		<http:listener doc:name="Listener"
+			doc:id="84b0165a-f200-45a5-b900-4804f607b45a"
+			config-ref="HTTP_Listener_config" path="/scheduler" />
 		<set-variable value="#[correlationId default uuid()]"
 			doc:name="correlationId"
 			doc:id="ac8e1a07-18ae-46bd-a24b-920e1dc39d68"
 			variableName="copyCustom_corrId" />
+		<logger level="INFO" doc:name="Logger"
+			doc:id="6e3885f5-eb6b-4873-8bc7-5551c399e903"
+			message="Scheduler Endpoint started"
+			category="Scheduler Endpoint started" />
+
 		<flow-ref doc:name="subscriptions-Insert-SubFlow"
 			doc:id="9a682398-1a48-4863-883c-ea9f5bc8711b"
 			name="subscriptions-Insert-SubFlow" />
+
 		<flow-ref doc:name="subscriptionItems-Insert-SubFlow"
 			doc:id="83c9ba6b-8b08-4dac-99b6-c4e5b2e4c097"
-			name="subscriptionItems-Insert-SubFlow" />
+			name="subscriptionItems-Insert-SubFlow" target="subItemResponse"/>
 
-		<flow-ref doc:name="contract-Asset-Consumer-SubFlow"
+
+		<logger level="INFO" doc:name="Logger" doc:id="4d841e68-c979-4fc3-a29f-aac03fab8f7f" message="Insert completed" category="Insert completed"/>
+		<flow-ref doc:name="contractAsset-SubFlow"
 			doc:id="9017720e-0bfb-4dab-a2b2-0883f7190d42"
-			name="contract-Asset-Consumer-SubFlow" />
-		<flow-ref doc:name="Flow Reference" doc:id="87e2d314-4912-472c-8e0f-f50e416af0c3" name="NS-Subscription-Consumer-SubFlow"/>
+			name="contractAsset-SubFlow" />
+
+		<flow-ref doc:name="NSSubscriptions-SubFlow"
+			doc:id="87e2d314-4912-472c-8e0f-f50e416af0c3"
+			name="NSSubscriptions-SubFlow" />
+		<flow-ref doc:name="subscriptions-Update-SubFlow"
+			doc:id="c5f6edd6-97b6-4e8b-a4a7-e9a5b47199bf"
+			name="subscriptions-Update-SubFlow" />
+		<flow-ref doc:name="subscriptionItems-Update-SubFlow"
+			doc:id="e217e9f2-a4da-4344-9d08-2e336817fed8"
+			name="subscriptionItems-Update-SubFlow" />
 
 	</flow>
+
+
+
+
 	<sub-flow name="subscriptions-Insert-SubFlow"
 		doc:id="fd7ab549-dd2e-464c-bcf4-c9e2c0cbe32d">
 
@@ -168,7 +191,7 @@ headers: payload.Envelope.Header
 
 		<logger level="INFO" doc:name="Logger-Payload"
 			doc:id="ba2df9b0-26fb-4ac4-881f-7840688ef09b" message="#[payload]"
-			category="Input payload logger" />
+			category="@@@Insert Subscription REQ Netsuite--&gt;SFDC@@@@" />
 
 
 		<wsc:consume doc:name="Calling Soap Request"
@@ -180,12 +203,6 @@ headers: payload.Envelope.Header
 				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
 			</wsc:message>
 		</wsc:consume>
-
-
-
-		<logger level="INFO" doc:name="Logger"
-			doc:id="f59b33f5-f246-427d-9caf-021b88c3276d" message="#[payload]"
-			category="@@@ Response SOA Webservices -Subscriptions Headers@@@@" />
 		<ee:transform doc:name="Transform Message"
 			doc:id="99ecd904-93ec-4410-ac33-145f57cc00a4">
 			<ee:message>
@@ -236,7 +253,7 @@ payload.soapenv#Body.msgs#searchResponse.platformCore#searchResult.platformCore#
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger"
 			doc:id="4543871a-425c-4f39-a998-8327d0a38754" message="#[payload]"
-			category="@@@@Subscription Response @@@@" />
+			category="@@@Insert Subscription RES --&gt; subscription-req-queue @@@@" />
 
 		<anypoint-mq:publish
 			doc:name="Publish-Subscription"
@@ -256,6 +273,8 @@ payload.soapenv#Body.msgs#searchResponse.platformCore#searchResult.platformCore#
 
 
 	</sub-flow>
+
+
 	<sub-flow name="subscriptionItems-Insert-SubFlow"
 		doc:id="619f5d87-9a46-43b8-bdb5-0de3c242b103">
 
@@ -376,6 +395,9 @@ headers: payload.Envelope.Header
 		</ee:transform>
 
 
+		<logger level="INFO" doc:name="Logger"
+			doc:id="132d42cd-dd2c-4c1e-8cda-ac1c7db7bf8b" message="#[payload]"
+			category="@@@@@Insert Subscription Item Request @@@@@" />
 		<wsc:consume doc:name="Calling Soap Request"
 			doc:id="9187ae63-ad00-4292-accb-568679e6f45c"
 			config-ref="Web_Service_Consumer_Config"
@@ -385,16 +407,6 @@ headers: payload.Envelope.Header
 				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
 			</wsc:message>
 		</wsc:consume>
-
-
-
-
-
-
-
-		<logger level="INFO" doc:name="Logger"
-			doc:id="132d42cd-dd2c-4c1e-8cda-ac1c7db7bf8b" message="#[payload]"
-			category="@@@@Response of Item SOAP Service@@@@" />
 		<ee:transform doc:name="Transform Message"
 			doc:id="6e3616c9-0d99-4155-90c4-d86d6927b450">
 			<ee:message>
@@ -428,7 +440,7 @@ nsSubscriptionsId: searchRow.*setupCustom#customSearchJoin.platformCommon#custom
 
 		<logger level="INFO" doc:name="Logger"
 			doc:id="73caf03d-11a6-4f9e-afb9-f346c337c91e" message="#[payload]"
-			category="@@@@Sub Item response @@@@@@" />
+			category="@@@@@Insert Subscription Response--&gt; req @@@@@" />
 		<anypoint-mq:publish doc:name="Publish-SubItem"
 			doc:id="f1c39697-1454-49ca-8d19-bc3723f6df57"
 			config-ref="Anypoint_MQ_Config"
@@ -450,33 +462,46 @@ nsSubscriptionsId: searchRow.*setupCustom#customSearchJoin.platformCommon#custom
 
 	<sub-flow name="contractAsset-SubFlow"
 		doc:id="bcb9a43b-3d29-44cd-9876-f948644941d5">
-
-
-		<logger level="INFO" doc:name="Logger"
-			doc:id="f2bfb58f-feee-4d7d-a2f5-d8abc0ba3714"
-			message="#[message.attributes]" category="Contract asset Payload" />
-		<flow-ref doc:name="oauth-header-generator-soapHeader"
-			doc:id="d8a31e36-164b-4e2a-b1e7-e6a6774cd303"
-			name="oauth-header-generator-soapHeader" />
-		<logger level="INFO" doc:name="Logger"
-			doc:id="9f11296d-ea1a-4646-ab3c-2e1a8d292dfc" message="#[payload]"
-			category="********contract Asset Inbound payload********" />
+		<anypoint-mq:consume
+			doc:name="Consume-Contract-Asset-Data"
+			doc:id="939c9b7b-58b3-4e57-880b-2a26508d6002"
+			config-ref="Anypoint_MQ_Config"
+			destination="${subscription-res-queue}" pollingTime="0" />
 		<ee:transform doc:name="Transform Message"
-			doc:id="0598ec1c-e3e6-405f-883e-3d932d7c597b">
+			doc:id="ef76eda6-7220-4e38-a28b-f1ba1ffe8a95">
 			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="objectName"><![CDATA[%dw 2.0
+output application/json
+---
+attributes.properties.objectName]]></ee:set-variable>
+				<ee:set-variable variableName="operationType"><![CDATA[%dw 2.0
+output application/json
+---
+attributes.properties.operationType]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice"
+			doc:id="86d1eabe-4242-447d-8990-fb4102644d52">
+			<when
+				expression='#[vars.objectName == "contractAsset" and vars.operationType == "Insert"]'>
+				<flow-ref doc:name="oauth-header-generator-soapHeader"
+					doc:id="d8a31e36-164b-4e2a-b1e7-e6a6774cd303"
+					name="oauth-header-generator-soapHeader" />
+				<ee:transform doc:name="Merge-Primary-Secondary"
+					doc:id="0598ec1c-e3e6-405f-883e-3d932d7c597b">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 payload.primaryIds ++ payload.secondaryIds ]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger"
-			doc:id="a99561fa-b736-4db1-b561-48b8cc0d603c" message="#[payload]"
-			category="********Merged contract Asset Inbound payload********" />
-		<ee:transform doc:name="Set Request-Primary"
-			doc:id="c6b4ad30-c918-4fe6-9ad4-380b5ad215f7">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="Set Request-Primary"
+					doc:id="c6b4ad30-c918-4fe6-9ad4-380b5ad215f7">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ns soap http://schemas.xmlsoap.org/soap/envelope/
 ns soapEnc http://schemas.xmlsoap.org/soap/encoding/
@@ -595,19 +620,18 @@ ns ns5 urn:messages_2020_1.platform.webservices.netsuite.com
 	}
 }
 ]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-
-		<ee:transform doc:name="To XML"
-			doc:id="d47741d0-a255-497e-976e-0bba7e04ec48">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="To XML"
+					doc:id="d47741d0-a255-497e-976e-0bba7e04ec48">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ---
 payload]]></ee:set-payload>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
 output application/xml
 ns soap http://schemas.xmlsoap.org/soap/envelope/
 ---
@@ -615,26 +639,23 @@ ns soap http://schemas.xmlsoap.org/soap/envelope/
 headers: payload.Envelope.Header
 
 }]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger"
-			doc:id="56f71728-93a5-4dad-b4ca-03bd4c0d976a" message="#[payload]"
-			category="REQ to Contract NS" />
-		<wsc:consume doc:name="contract-Asset-Invoke"
-			doc:id="23b03b2f-db63-4bd7-8a6a-156d16c73b1b"
-			config-ref="Web_Service_Consumer_Config" operation="updateList">
-			<wsc:message>
-				<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
-				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
-			</wsc:message>
-		</wsc:consume>
-		<logger level="INFO" doc:name="Logger"
-			doc:id="cdc6e695-6f85-427f-b454-1cfb2be50b55" message="#[payload]"
-			category="output of contract flow" />
-		<ee:transform doc:name="Transform Message"
-			doc:id="5341380e-7ebd-421f-b387-3be228901d7e">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="56f71728-93a5-4dad-b4ca-03bd4c0d976a" message="#[payload]"
+					category="REQ to Contract NS  ----&gt;" />
+				<wsc:consume doc:name="contract-Asset-Invoke"
+					doc:id="23b03b2f-db63-4bd7-8a6a-156d16c73b1b"
+					config-ref="Web_Service_Consumer_Config" operation="updateList">
+					<wsc:message>
+						<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
+						<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
+					</wsc:message>
+				</wsc:consume>
+				<ee:transform doc:name="Transform Message"
+					doc:id="5341380e-7ebd-421f-b387-3be228901d7e">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ns ns0 urn:messages_2020_1.platform.webservices.netsuite.com
 ns soapenv http://schemas.xmlsoap.org/soap/envelope/
@@ -649,44 +670,69 @@ ns platformCore urn:core_2020_1.platform.webservices.netsuite.com
 
 	}
 )]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger"
-			doc:id="53da0614-1d91-43b1-a87a-edf2eccb6faa" message="#[payload]"
-			category="Transformed Contract ASEET Payload from SERVICE" />
-
-		<anypoint-mq:publish
-			doc:name="Publish-ContractAsset"
-			doc:id="2f848146-6714-46b8-8f93-c9b856ec7681"
-			config-ref="Anypoint_MQ_Config"
-			destination="${ns-subscription-status-queue}">
-			<anypoint-mq:properties><![CDATA[#[output application/java
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="53da0614-1d91-43b1-a87a-edf2eccb6faa" message="#[payload]"
+					category="@@@@ Contract ASEET Response--&gt;Status @@@@@@" />
+				<anypoint-mq:publish
+					doc:name="Publish-ContractAsset"
+					doc:id="2f848146-6714-46b8-8f93-c9b856ec7681"
+					config-ref="Anypoint_MQ_Config"
+					destination="${ns-subscription-status-queue}">
+					<anypoint-mq:properties><![CDATA[#[output application/java
 ---
 {
 	"correlationId" : vars.copyCustom_corrId,
 	"objectName" : "contractAsset",
 	"operationType": "Insert"
 }]]]></anypoint-mq:properties>
-		</anypoint-mq:publish>
+				</anypoint-mq:publish>
+
+
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="170a8aa8-bd87-4b75-8320-864146ef487e" message="#[payload]"
+					category="@@@@MQ Message property header values are Null@@@@" />
+			</otherwise>
+		</choice>
 
 	</sub-flow>
 	<sub-flow name="NSSubscriptions-SubFlow"
 		doc:id="e8448a0b-fa23-450c-a8b5-7eef30da2b9b">
 
-		<logger level="INFO" doc:name="Logger"
-			doc:id="4f405f40-1c5e-4859-85ad-fd983f2016cd" message="#[payload]"
-			category="@@@received request for NS Subscription Update@@@" />
-
-		<flow-ref doc:name="oauth-header-generator-soapHeader"
-			doc:id="269278a7-dd54-4599-aaf6-2ad1590ac5a7"
-			name="oauth-header-generator-soapHeader" />
-		<logger level="INFO" doc:name="Logger"
-			doc:id="667f3d7f-2086-4e3b-9a23-d6ad9d6d3ab0" message="#[payload]"
-			category="received request from Queue" />
+		<anypoint-mq:consume
+			doc:name="Consume-subscription-Data"
+			doc:id="b325cdef-bebf-433e-a5a0-b2bad61bfbca"
+			config-ref="Anypoint_MQ_Config"
+			destination="${subscription-res-queue}" pollingTime="0" />
 		<ee:transform doc:name="Transform Message"
-			doc:id="6767a4de-133f-4581-90df-b92278fec975">
+			doc:id="b4e3adc9-f346-4592-9a57-2043da9415d3">
 			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="objectName"><![CDATA[%dw 2.0
+output application/json
+---
+attributes.properties.objectName]]></ee:set-variable>
+				<ee:set-variable variableName="operationType"><![CDATA[%dw 2.0
+output application/json
+---
+attributes.properties.operationType]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice"
+			doc:id="da4e4653-14c4-4ebc-a5d0-0e3ee79a6604">
+			<when
+				expression='#[vars.objectName == "nsSubscription" and vars.operationType == "Insert"]'>
+				<flow-ref doc:name="oauth-header-generator-soapHeader"
+					doc:id="269278a7-dd54-4599-aaf6-2ad1590ac5a7"
+					name="oauth-header-generator-soapHeader" />
+				<ee:transform doc:name="Set-Request"
+					doc:id="6767a4de-133f-4581-90df-b92278fec975">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ns soap http://schemas.xmlsoap.org/soap/envelope/
 ns soapEnc http://schemas.xmlsoap.org/soap/encoding/
@@ -799,18 +845,18 @@ ns ns5 urn:messages_2020_1.platform.webservices.netsuite.com
 	}
 }
 ]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<ee:transform doc:name="To XML"
-			doc:id="35f82b06-1604-4ac0-901e-92da092dc9a8">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="To XML"
+					doc:id="35f82b06-1604-4ac0-901e-92da092dc9a8">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ---
 payload]]></ee:set-payload>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
 output application/xml
 ns soap http://schemas.xmlsoap.org/soap/envelope/
 ---
@@ -818,27 +864,25 @@ ns soap http://schemas.xmlsoap.org/soap/envelope/
 headers: payload.Envelope.Header
 
 }]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger"
-			doc:id="889738b4-5323-4caa-83d3-ae96a652f1b7" message="#[payload]"
-			category="Transformation request" />
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="889738b4-5323-4caa-83d3-ae96a652f1b7" message="#[payload]"
+					category="@@@@@NS Subscription Item Transformation request@@@@@" />
+				<wsc:consume doc:name="Invoke-SubItem-Update"
+					doc:id="eb115912-a9ce-41d2-982a-1a5e4144bdb0"
+					config-ref="Web_Service_Consumer_Config" operation="updateList">
 
-		<wsc:consume doc:name="Consume"
-			doc:id="eb115912-a9ce-41d2-982a-1a5e4144bdb0"
-			config-ref="Web_Service_Consumer_Config" operation="updateList">
 
-
-			<wsc:message>
-				<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
-				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
-			</wsc:message>
-		</wsc:consume>
-
-		<ee:transform doc:name="Response-Trans"
-			doc:id="65e11458-bf6f-4df5-8de7-ad1da46ef0c6">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+					<wsc:message>
+						<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
+						<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
+					</wsc:message>
+				</wsc:consume>
+				<ee:transform doc:name="Response-Trans"
+					doc:id="65e11458-bf6f-4df5-8de7-ad1da46ef0c6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ns ns0 urn:messages_2020_1.platform.webservices.netsuite.com
 ns soapenv http://schemas.xmlsoap.org/soap/envelope/
@@ -854,99 +898,35 @@ ns platformCore urn:core_2020_1.platform.webservices.netsuite.com
 
 	}
 )]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-
-
-		<logger level="INFO" doc:name="Logger"
-			doc:id="d6035750-d1c4-49ba-9c31-45fb672526f2" message="#[payload]"
-			category="Final Response" />
-		<anypoint-mq:publish
-			doc:name="Publish-NSSub-Response"
-			doc:id="2f848146-6714-46b8-8f93-c9b856ec7681"
-			config-ref="Anypoint_MQ_Config"
-			destination="${ns-subscription-status-queue}">
-			<anypoint-mq:properties><![CDATA[#[output application/java
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="d6035750-d1c4-49ba-9c31-45fb672526f2" message="#[payload]"
+					category="@@@@NS Subscripton Update Final Response ---&gt; status@@@@" />
+				<anypoint-mq:publish
+					doc:name="Publish-NSSub-Response"
+					doc:id="2f848146-6714-46b8-8f93-c9b856ec7681"
+					config-ref="Anypoint_MQ_Config"
+					destination="${ns-subscription-status-queue}">
+					<anypoint-mq:properties><![CDATA[#[output application/java
 ---
 {
 	"correlationId" : vars.copyCustom_corrId,
 	"objectName" : "nsSubscription",
 	"operationType": "Insert"
 }]]]></anypoint-mq:properties>
-		</anypoint-mq:publish>
+				</anypoint-mq:publish>
 
 
-
-	</sub-flow>
-	
-	
-	<sub-flow name="contract-Asset-Consumer-SubFlow" doc:id="a1052a39-95c8-4586-8f6e-4924a6949ef9">
-	<anypoint-mq:consume doc:name="Consume-Contract-Asset-Data" doc:id="939c9b7b-58b3-4e57-880b-2a26508d6002" config-ref="Anypoint_MQ_Config" destination="${subscription-res-queue}" pollingTime="0" />
-		
-		<logger level="INFO" doc:name="Logger" doc:id="f58ace69-59f8-491a-908e-ffbdc1819094" message="#[payload]" category="Contract Asset data"/>
-		<ee:transform doc:name="Transform Message" doc:id="ef76eda6-7220-4e38-a28b-f1ba1ffe8a95" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="objectName" ><![CDATA[%dw 2.0
-output application/json
----
-attributes.properties.objectName]]></ee:set-variable>
-				<ee:set-variable variableName="operationType" ><![CDATA[%dw 2.0
-output application/json
----
-attributes.properties.operationType]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<choice doc:name="Choice" doc:id="86d1eabe-4242-447d-8990-fb4102644d52" >
-			<when expression='#[vars.objectName == "contractAsset" and vars.operationType == "Insert"]'>
-				<logger level="INFO" doc:name="Logger" doc:id="5ac10830-91e4-49c9-bc67-d4c3aaace889" message="contract Asset flow started" category="contract Asset flow started"/>
-				<flow-ref doc:name="contractAsset-SubFlow" doc:id="e8698056-9f89-4d73-b5e6-6be7422d4306" name="contractAsset-SubFlow"/>
-			
-</when>
-			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="170a8aa8-bd87-4b75-8320-864146ef487e" message="#[payload]" category="@@@@MQ Message property header values are Null@@@@"/>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger"
+					doc:id="d34cfd75-7472-4bbf-8197-cd09d195f230" message="#[payload]"
+					category="@@@@MQ Message property header values are Null@@@@" />
 			</otherwise>
 		</choice>
-	
-	
+
+
+
 	</sub-flow>
-	
-	
-
-<sub-flow name="NS-Subscription-Consumer-SubFlow" doc:id="b4df3db7-2871-4c61-9810-1153712156f9">
-	<anypoint-mq:consume doc:name="Consume-subscription-Data" doc:id="b325cdef-bebf-433e-a5a0-b2bad61bfbca" config-ref="Anypoint_MQ_Config" destination="${subscription-res-queue}" pollingTime="0" />
-		
-		<logger level="INFO" doc:name="Logger" doc:id="64e0fb83-f695-4631-80ad-8ec83926f680" message="#[payload]" category="NS Subscription data"/>
-		<ee:transform doc:name="Transform Message" doc:id="b4e3adc9-f346-4592-9a57-2043da9415d3" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="objectName" ><![CDATA[%dw 2.0
-output application/json
----
-attributes.properties.objectName]]></ee:set-variable>
-				<ee:set-variable variableName="operationType" ><![CDATA[%dw 2.0
-output application/json
----
-attributes.properties.operationType]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<choice doc:name="Choice" doc:id="da4e4653-14c4-4ebc-a5d0-0e3ee79a6604" >
-			<when expression='#[vars.objectName == "nsSubscription" and vars.operationType == "Insert"]'>
-				<logger level="INFO" doc:name="Logger" doc:id="9d33f1ab-b996-49ee-8d49-5d5c2bf9abd6" message="contract Asset flow started" category="contract Asset flow started"/>
-				<flow-ref doc:name="NSSubscriptions-SubFlow" doc:id="d1f9db06-ce74-4b66-b8d6-8d9523d425bb" name="NSSubscriptions-SubFlow"/>
-			
-</when>
-			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="d34cfd75-7472-4bbf-8197-cd09d195f230" message="#[payload]" category="@@@@MQ Message property header values are Null@@@@"/>
-			</otherwise>
-		</choice>
-	
-	
-	</sub-flow>
-
-
-
-
 </mule>

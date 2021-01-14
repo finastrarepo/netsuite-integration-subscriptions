@@ -1,0 +1,1531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	
+		
+	<sub-flow name="subscriptions-Update-SubFlow"
+		doc:id="85a27e95-b714-4488-94e6-847fe8b27fa6">
+
+		<flow-ref doc:name="oauth-header-generator-soapHeader"
+			doc:id="7d2fe1c4-bff5-4820-bc07-a1c6379b80a6"
+			name="oauth-header-generator-soapHeader" />
+		<ee:transform doc:name="Set Request"
+			doc:id="fa0eaace-efa3-40a2-b078-91ad1fa48ccd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns soap http://schemas.xmlsoap.org/soap/envelope/
+ns soapEnc http://schemas.xmlsoap.org/soap/encoding/
+ns ns24 urn:messages_2020_1.platform.webservices.netsuite.com
+ns urn urn:messages_2020_1.platform.webservices.netsuite.com
+ns ns8 urn:core_2020_1.platform.webservices.netsuite.com
+---
+//payload.ns0#Envelope.ns0#Body.add.record.itemList
+{
+	soap#Envelope @("soap:encodingStyle" : "http://schemas.xmlsoap.org/soap/encoding/", 
+	"xmlns:messages" : "urn:messages_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:accountingLists":"urn:accounting_2020_1.lists.webservices.netsuite.com",
+	"xmlns:employeesLists":"urn:employees_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:employeesTransactionsTypes":"urn:types.employees_2020_1.transactions.webservices.netsuite.com" , 
+	"xmlns:demandplanningTransactions":"urn:demandplanning_2020_1.transactions.webservices.netsuite.com", 
+	"xmlns:common":"urn:common_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:commonTypes":"urn:types.common_2020_1.platform.webservices.netsuite.com" , 
+	"xmlns:accountingListsTypes": "urn:types.accounting_2020_1.lists.webservices.netsuite.com",
+	"xmlns:customizationSetup":"urn:customization_2020_1.setup.webservices.netsuite.com",
+	"xmlns:inventoryTransactionsTypes": "urn:types.inventory_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:filecabinetDocuments":"urn:filecabinet_2020_1.documents.webservices.netsuite.com", 
+	"xmlns:bankTransactionsTypes":"urn:types.bank_2020_1.transactions.webservices.netsuite.com", 
+	"xmlns:communicationGeneralTypes":"urn:types.communication_2020_1.general.webservices.netsuite.com",
+	"xmlns:customizationSetupTypes":"urn:types.customization_2020_1.setup.webservices.netsuite.com" , 
+	"xmlns:supplychainListsTypes":"urn:types.supplychain_2020_1.lists.webservices.netsuite.com" , 
+	"xmlns:core":"urn:core_2020_1.platform.webservices.netsuite.com",
+	"xmlns:coreTypes":"urn:types.core_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:soapenc":"http://schemas.xmlsoap.org/soap/encoding/", 
+	"xmlns:supplychainLists":"urn:supplychain_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:demandplanningTransactionsTypes":"urn:types.demandplanning_2020_1.transactions.webservices.netsuite.com" ,
+	"xmlns:websiteLists":"urn:website_2020_1.lists.webservices.netsuite.com",
+	"xmlns:salesTransactions":"urn:sales_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:salesTransactionsTypes":"urn:types.sales_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:relationshipsLists":"urn:relationships_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:inventoryTransactions":"urn:inventory_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:employeesListsTypes":"urn:types.employees_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 	
+	 "xmlns:customersTransactions":"urn:customers_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:schedulingActivitiesTypes":"urn:types.scheduling_2020_1.activities.webservices.netsuite.com", 
+ 	"xmlns:financialTransactions":"urn:financial_2020_1.transactions.webservices.netsuite.com", 
+ 	"xmlns:xsd":"http://www.w3.org/2001/XMLSchema", 
+ 	"xmlns:relationshipsListsTypes":"urn:types.relationships_2020_1.lists.webservices.netsuite.com",
+ 	"xmlns:employeesTransactions":"urn:employees_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:faults":"urn:faults_2020_1.platform.webservices.netsuite.com",
+	 "xmlns:marketingListsTypes":"urn:types.marketing_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:communicationGeneral":"urn:communication_2020_1.general.webservices.netsuite.com",
+	 "xmlns:faultsTypes":"urn:types.faults_2020_1.platform.webservices.netsuite.com",
+	 "xmlns:supportListsTypes":"urn:types.support_2020_1.lists.webservices.netsuite.com",
+ 	"xmlns:websiteListsTypes":"urn:types.website_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:purchasesTransactions":"urn:purchases_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:financialTransactionsTypes":"urn:types.financial_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:schedulingActivities":"urn:scheduling_2020_1.activities.webservices.netsuite.com",
+	 "xmlns:bankTransactions":"urn:bank_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:marketingLists":"urn:marketing_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:customersTransactionsTypes":"urn:types.customers_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:purchasesTransactionsTypes":"urn:types.purchases_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:generalTransactions":"urn:general_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:ns24":"urn:messages_2020_1.platform.webservices.netsuite.com",
+ 	"xmlns:ns13":"urn:customization_2020_1.setup.webservices.netsuite.com",
+	 "xmlns:filecabinetDocumentsTypes":"urn:types.filecabinet_2020_1.documents.webservices.netsuite.com" ): {
+		soap#Header: {
+			urn#tokenPassport: {
+				ns8#account : p('kimbleSoapNetsuite.realm'),
+				ns8#consumerKey: p('secure::kimbleSoapNetsuite.consumerKey'),
+				ns8#token: p('secure::kimbleSoapNetsuite.token'),
+				ns8#nonce: (vars.oAuthHeaderFinal splitBy(","))[0],
+				ns8#timestamp: (vars.oAuthHeaderFinal splitBy(","))[1],
+				ns8#signature @("algorithm": p('soap.algorithm')): (vars.oAuthHeaderFinal splitBy(","))[2]
+			}
+		},
+		soap#Body: {
+			ns24#search @("xmlns":"urn:messages_2020_1.platform.webservices.netsuite.com"): {
+				ns24#searchRecord @("xsi:type":"ns13:CustomRecordSearchAdvanced", "savedSearchId": p('subscriptionUpdateSearch') ): {
+				}
+			}
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="To XML"
+			doc:id="077ae800-3646-49df-809e-ed99bb47fa81">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+payload
+
+
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
+output application/xml
+ns soap http://schemas.xmlsoap.org/soap/envelope/
+---
+{
+headers: payload.Envelope.Header
+
+
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+
+
+
+		<logger level="INFO" doc:name="Logger-Payload"
+			doc:id="c8a2b896-33ec-48ab-87cc-b284740be9ac" message="#[payload]"
+			category="@@@Subscription update request @@@@" />
+
+
+		<wsc:consume doc:name="Calling Soap Request"
+			doc:id="633a5457-3d6e-4b16-ac21-c3ef252594b6"
+			config-ref="Web_Service_Consumer_Config"
+			operation="${soap.wsdlSearchOperation}">
+			<wsc:message>
+				<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
+				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
+			</wsc:message>
+		</wsc:consume>
+		<ee:transform doc:name="Transform Message"
+			doc:id="a3dd808b-5bd1-4746-92fb-ea3a9d3295ba">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+ns msgs urn:messages_2020_1.platform.webservices.netsuite.com
+ns soapenv http://schemas.xmlsoap.org/soap/envelope/
+ns platformCore urn:core_2020_1.platform.webservices.netsuite.com
+ns setupCustom urn:customization_2020_1.setup.webservices.netsuite.com
+ns platformCommon urn:common_2020_1.platform.webservices.netsuite.com
+---
+payload.soapenv#Body.msgs#searchResponse.platformCore#searchResult.platformCore#searchRowList.*platformCore#searchRow map (searchRow , indexOfSearchRow ) -> {
+	nsSubscriptionsId: searchRow.setupCustom#basic.platformCommon#name.platformCore#searchValue[0 to 5],
+	name: searchRow.setupCustom#basic.platformCommon#name.platformCore#searchValue default "",
+	billingModeInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sub_billing_mode")].platformCore#searchValue.@internalId[0],
+	billingTransactionInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_billing_transaction")].platformCore#searchValue.@internalId[0],
+	currentAdvBillDate: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_misys_current_adv_bill")].platformCore#searchValue[0],
+	actBySubId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_customer")].platformCore#searchValue.@internalId[0],
+	fixedBillingDate: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_fixed_billing_date")].platformCore#searchValue[0],	
+	isInactive: searchRow.setupCustom#basic.platformCommon#isInactive.platformCore#searchValue[0],
+	lastBilledDateTime: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_last_billing_date_ui")].platformCore#searchValue.@internalId[0],
+	nsFinanceRegionId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_location")].platformCore#searchValue.@internalId[0],
+	nsCurrencyId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_currency")].platformCore#searchValue.@internalId[0],
+	internalId: searchRow.setupCustom#basic.platformCommon#internalId.platformCore#searchValue.@internalId[0],
+	nextBillingDateTime: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_next_billing_date_ui")].platformCore#searchValue[0],
+	sbCashAccounting: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_cashaccounting")].platformCore#searchValue[0],
+	sbContractNumber: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_contract_number")].platformCore#searchValue[0],
+	userId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_creditcontroller")].platformCore#searchValue.@internalId[0],
+	sbDocumentMemo: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_doc_memo")].platformCore#searchValue.@internalId[0],
+	sbLegacyMisysRef: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_misysref")].platformCore#searchValue[0],
+	sbTransactionCategoryInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_mis_sb_trans_categ")].platformCore#searchValue.@internalId[0],
+	setAdvanceBillingDate: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_misys_set_adv_bill_date")].platformCore#searchValue.@internalId[0],
+	startDateTime: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_start_date_ui")].platformCore#searchValue[0],
+	statusInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_status")].platformCore#searchValue.@internalId[0],
+	billingEntityId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_subscription_subsidiary")].platformCore#searchValue.@internalId[0],
+	holdBilling: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_hold_billing")].platformCore#searchValue[0],
+	billingGroupId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sfdc_billing_group")].platformCore#searchValue[0],
+	terminationDateTime: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_termination_date_ui")].platformCore#searchValue[0],
+	terminationMethodInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sub_cancellation_type")].platformCore#searchValue.@internalId[0],
+	migrateInvoiceDateStartDate: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_misys_migrate_start_date")].platformCore#searchValue[0],
+	// holdBillingReasonInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sub_cancellation_type")].platformCore#searchValue.@internalId[0],
+	// holdBillingReasonName:
+	holdBillingReviewDate: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_hold_billing_review_date")].platformCore#searchValue[0]
+// errorInfo:
+// holdReasonDetail:
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger"
+			doc:id="db77b25f-14da-4238-aa2b-f07e2914eed7" message="#[payload]"
+			category="@@@@Subscription Update Response @@@@" />
+
+		<anypoint-mq:publish
+			doc:name="Publish-Subscription"
+			doc:id="a32bc873-5035-4723-ae2c-01387ff7d10b"
+			config-ref="Anypoint_MQ_Config"
+			destination="${subscription-req-queue}">
+
+			<anypoint-mq:properties><![CDATA[#[output application/java
+---
+{
+	"correlationId" : vars.copyCustom_corrId,
+	"objectName" : "nsSubscription",
+	"operationType": "Update"
+}]]]></anypoint-mq:properties>
+
+		</anypoint-mq:publish>
+
+
+	</sub-flow>
+	
+	
+	<flow name="netsuite-integration-subscriptions-updateFlow" doc:id="55c6dab2-9723-4e04-8c17-7865088f6300" >
+		<http:listener doc:name="Listener" doc:id="3c695d7f-85ac-4ff7-81e6-3f58d23892ed" config-ref="HTTP_Listener_config" path="/update"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9e56037b-fd84-4dc0-bbea-0c6cecefc515" message="flow started"/>
+		<ee:transform doc:name="Set-Payload" doc:id="2c6b6125-2e41-4cf7-9058-05c0cb34e80d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+},
+  {
+	"nsSubscriptionsId": [
+      "729948"
+    ],
+	"nsBillingFrequencyId": "test123",
+	"sbSfdcContractAssetId": "a1d0J000005wf7lQAA",
+	"product2Id": [
+      "331"
+    ],
+	"nsFinanceRegionId": null,
+	"internalId": "2616149",
+	"quantity": "1.0",
+	"nsTaxCodeId": "1810",
+	"nsSubscriptionTermId": [
+      "14"
+    ],
+	"nsSubscriptionPlanId": "61621",
+	"terminationMethodInternalId": "2"
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<sub-flow name="subscriptionItems-Update-SubFlow"
+		doc:id="a42fbf5a-c74a-4fb0-a3fe-7d6f781b2b0d">
+
+
+
+		<flow-ref doc:name="oauth-header-generator-soapHeader"
+			doc:id="4cda194f-f689-41f1-b97c-8d3184a35165"
+			name="oauth-header-generator-soapHeader" />
+
+
+		<ee:transform doc:name="Set Request"
+			doc:id="fcf490c3-fa9b-4044-8842-4cfc95c72dbe">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns soap http://schemas.xmlsoap.org/soap/envelope/
+ns soapEnc http://schemas.xmlsoap.org/soap/encoding/
+ns ns24 urn:messages_2020_1.platform.webservices.netsuite.com
+ns urn urn:messages_2020_1.platform.webservices.netsuite.com
+ns ns8 urn:core_2020_1.platform.webservices.netsuite.com
+---
+//payload.ns0#Envelope.ns0#Body.add.record.itemList
+{
+	soap#Envelope @("soap:encodingStyle" : "http://schemas.xmlsoap.org/soap/encoding/", 
+	"xmlns:messages" : "urn:messages_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:accountingLists":"urn:accounting_2020_1.lists.webservices.netsuite.com",
+	"xmlns:employeesLists":"urn:employees_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:employeesTransactionsTypes":"urn:types.employees_2020_1.transactions.webservices.netsuite.com" , 
+	"xmlns:demandplanningTransactions":"urn:demandplanning_2020_1.transactions.webservices.netsuite.com", 
+	"xmlns:common":"urn:common_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:commonTypes":"urn:types.common_2020_1.platform.webservices.netsuite.com" , 
+	"xmlns:accountingListsTypes": "urn:types.accounting_2020_1.lists.webservices.netsuite.com",
+	"xmlns:customizationSetup":"urn:customization_2020_1.setup.webservices.netsuite.com",
+	"xmlns:inventoryTransactionsTypes": "urn:types.inventory_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:filecabinetDocuments":"urn:filecabinet_2020_1.documents.webservices.netsuite.com", 
+	"xmlns:bankTransactionsTypes":"urn:types.bank_2020_1.transactions.webservices.netsuite.com", 
+	"xmlns:communicationGeneralTypes":"urn:types.communication_2020_1.general.webservices.netsuite.com",
+	"xmlns:customizationSetupTypes":"urn:types.customization_2020_1.setup.webservices.netsuite.com" , 
+	"xmlns:supplychainListsTypes":"urn:types.supplychain_2020_1.lists.webservices.netsuite.com" , 
+	"xmlns:core":"urn:core_2020_1.platform.webservices.netsuite.com",
+	"xmlns:coreTypes":"urn:types.core_2020_1.platform.webservices.netsuite.com", 
+	"xmlns:soapenc":"http://schemas.xmlsoap.org/soap/encoding/", 
+	"xmlns:supplychainLists":"urn:supplychain_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:demandplanningTransactionsTypes":"urn:types.demandplanning_2020_1.transactions.webservices.netsuite.com" ,
+	"xmlns:websiteLists":"urn:website_2020_1.lists.webservices.netsuite.com",
+	"xmlns:salesTransactions":"urn:sales_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:salesTransactionsTypes":"urn:types.sales_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:relationshipsLists":"urn:relationships_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:inventoryTransactions":"urn:inventory_2020_1.transactions.webservices.netsuite.com",
+	"xmlns:employeesListsTypes":"urn:types.employees_2020_1.lists.webservices.netsuite.com", 
+	"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", 	
+	 "xmlns:customersTransactions":"urn:customers_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:schedulingActivitiesTypes":"urn:types.scheduling_2020_1.activities.webservices.netsuite.com", 
+ 	"xmlns:financialTransactions":"urn:financial_2020_1.transactions.webservices.netsuite.com", 
+ 	"xmlns:xsd":"http://www.w3.org/2001/XMLSchema", 
+ 	"xmlns:relationshipsListsTypes":"urn:types.relationships_2020_1.lists.webservices.netsuite.com",
+ 	"xmlns:employeesTransactions":"urn:employees_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:faults":"urn:faults_2020_1.platform.webservices.netsuite.com",
+	 "xmlns:marketingListsTypes":"urn:types.marketing_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:communicationGeneral":"urn:communication_2020_1.general.webservices.netsuite.com",
+	 "xmlns:faultsTypes":"urn:types.faults_2020_1.platform.webservices.netsuite.com",
+	 "xmlns:supportListsTypes":"urn:types.support_2020_1.lists.webservices.netsuite.com",
+ 	"xmlns:websiteListsTypes":"urn:types.website_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:purchasesTransactions":"urn:purchases_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:financialTransactionsTypes":"urn:types.financial_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:schedulingActivities":"urn:scheduling_2020_1.activities.webservices.netsuite.com",
+	 "xmlns:bankTransactions":"urn:bank_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:marketingLists":"urn:marketing_2020_1.lists.webservices.netsuite.com",
+	 "xmlns:customersTransactionsTypes":"urn:types.customers_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:purchasesTransactionsTypes":"urn:types.purchases_2020_1.transactions.webservices.netsuite.com",
+	 "xmlns:generalTransactions":"urn:general_2020_1.transactions.webservices.netsuite.com",
+ 	"xmlns:ns24":"urn:messages_2020_1.platform.webservices.netsuite.com",
+ 	"xmlns:ns13":"urn:customization_2020_1.setup.webservices.netsuite.com",
+	 "xmlns:filecabinetDocumentsTypes":"urn:types.filecabinet_2020_1.documents.webservices.netsuite.com" ): {
+		soap#Header: {
+			urn#tokenPassport: {
+				ns8#account : p('kimbleSoapNetsuite.realm'),
+				ns8#consumerKey: p('secure::kimbleSoapNetsuite.consumerKey'),
+				ns8#token: p('secure::kimbleSoapNetsuite.token'),
+				ns8#nonce: (vars.oAuthHeaderFinal splitBy(","))[0],
+				ns8#timestamp: (vars.oAuthHeaderFinal splitBy(","))[1],
+				ns8#signature @("algorithm": p('soap.algorithm')): (vars.oAuthHeaderFinal splitBy(","))[2]
+			}
+		},
+		soap#Body: {
+			ns24#search @("xmlns":"urn:messages_2020_1.platform.webservices.netsuite.com"): {
+				ns24#searchRecord @("xsi:type":"ns13:CustomRecordSearchAdvanced", "savedSearchId": p('subscriptionItemUpdateSearch') ): {
+				}
+			}
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="To XML"
+			doc:id="6cc1db04-86b7-464f-b370-3f7737fb9e53">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+payload
+
+
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="soapHeader"><![CDATA[%dw 2.0
+output application/xml
+ns soap http://schemas.xmlsoap.org/soap/envelope/
+---
+{
+headers: payload.Envelope.Header
+
+
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+
+
+		<logger level="INFO" doc:name="Logger" doc:id="9cec5363-9eab-498e-9e0e-01c695987bdd" message="#[%dw 2.0
+output application/xml
+---
+payload]" category="@@@Sub Item Update REQ ----&gt;"/>
+		<wsc:consume doc:name="Calling Soap Request"
+			doc:id="9ac5bb50-d079-40e6-a841-6bb3d7be3593"
+			config-ref="Web_Service_Consumer_Config"
+			operation="${soap.wsdlSearchOperation}">
+			<wsc:message>
+				<wsc:body><![CDATA[#[payload.Envelope.Body]]]></wsc:body>
+				<wsc:headers><![CDATA[#[vars.soapHeader]]]></wsc:headers>
+			</wsc:message>
+		</wsc:consume>
+
+		<ee:transform doc:name="Transform Message" doc:id="d14cb90a-5732-494b-8260-ac1bf7b741bc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns msgs urn:messages_2020_1.platform.webservices.netsuite.com
+ns soapenv http://schemas.xmlsoap.org/soap/envelope/
+ns platformCore urn:core_2020_1.platform.webservices.netsuite.com
+ns setupCustom urn:customization_2020_1.setup.webservices.netsuite.com
+ns platformCommon urn:common_2020_1.platform.webservices.netsuite.com
+---
+payload.soapenv#Body.msgs#searchResponse.platformCore#searchResult.platformCore#searchRowList.*platformCore#searchRow map (searchRow, indexOfSearchRow ) -> 
+{
+	nsSubscriptionsId: searchRow.*setupCustom#customSearchJoin filter ($.platformCommon#customizationRef.@scriptId == "custrecord_sb_sbitem_subscription") map  (item, index) -> (item.platformCommon#searchRowBasic.platformCommon#internalId.platformCore#searchValue.@internalId),
+	nsBillingFrequencyId: "test123",
+//billingMethodInternalId
+//nsChargeTypeId
+// coTermInternalId
+	sbSfdcContractAssetId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sfdc_contract_asset_id")].platformCore#searchValue[0],
+//discount:
+//endDate
+	product2Id: searchRow.*setupCustom#customSearchJoin filter ($.platformCommon#customizationRef.@scriptId == "custrecord_sb_sbitem_item") map  (item, index) -> (item.platformCommon#searchRowBasic.platformCommon#class.platformCore#searchValue.@internalId),
+//lastInvoiceDate: 
+//lastInvoicedFee
+//lastItemBillingDate
+//lastSubscriptionBillingDate
+	nsFinanceRegionId : searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_location")].platformCore#searchValue.@internalId[0],
+	internalId: searchRow.setupCustom#basic.platformCommon#internalId.platformCore#searchValue.@internalId,
+//nextItemBillingDate: 
+//nextSubscriptionBillingDate
+//nsOriginalSubscriptionItemId: 
+//salesOrderId:
+//nsSubscriptionItemId: 
+	quantity: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_quantity")].platformCore#searchValue[0],
+//nsRatePlanId
+//nsBillingFrequencyIdForRating
+//startDate
+// statusInternalId
+//nsSubscriptionPlanItemId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_subscriptionplan")].platformCore#searchValue.@internalId[0],
+	nsTaxCodeId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_tax_code")].platformCore#searchValue.@internalId[0],
+   
+	nsSubscriptionTermId: searchRow.*setupCustom#customSearchJoin filter ($.platformCommon#customizationRef.@scriptId == "custrecord_sb_sbitem_term_months") map  (item, index) -> item.platformCommon#searchRowBasic.platformCommon#internalId.platformCore#searchValue.@internalId,
+	
+	nsSubscriptionPlanId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_subscriptionplan")].platformCore#searchValue.@internalId[0],
+	
+	terminationMethodInternalId: searchRow.setupCustom#basic.platformCommon#customFieldList.*platformCore#customField[?($.@scriptId=="custrecord_sb_sbitem_cancellation_type")].platformCore#searchValue.@internalId[0],
+//parentIdInternalId:
+//sbPlannedBillingStartDate
+//revenueFairValue
+//realFairValue
+//sb3ppRate
+//nsCurrencyId
+//uplift
+//sb3ppDisc
+//upliftEffectiveDate
+//sbBillingStartTriggerInternalId
+//sbVendorBschTriggerInternalId
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="0ea09d27-b61f-4b82-9da0-ba5cbf222f12">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (item, index ) -> {
+	"nsSubscriptionsId": item.nsSubscriptionsId[0],
+	"nsBillingFrequencyId": item.nsBillingFrequencyId,
+	"sbSfdcContractAssetId": item.sbSfdcContractAssetId,
+	"product2Id": item.product2Id[0],
+	"nsFinanceRegionId": item.nsFinanceRegionId,
+	"internalId": item.internalId,
+	"quantity": item.quantity,
+	"nsTaxCodeId": item.nsTaxCodeId,
+	"nsSubscriptionTermId": item.nsSubscriptionTermId[0],
+	"nsSubscriptionPlanId": item.nsSubscriptionPlanId,
+	"terminationMethodInternalId": item.terminationMethodInternalId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger"
+			doc:id="631b2f18-7cfa-4b08-92af-1f328ea93eaa" message="#[payload]"
+			category="@@@@Sub Item Update response ----&gt;" />
+		<anypoint-mq:publish doc:name="Publish-SubItem"
+			doc:id="91299853-f02a-4f63-89af-a2cfba2106a9"
+			config-ref="Anypoint_MQ_Config"
+			destination="${subscription-req-queue}">
+			<anypoint-mq:properties><![CDATA[#[output application/java
+---
+{
+	"correlationId" : vars.copyCustom_corrId,
+	"objectName" : "nsSubscriptionItem",
+	"operationType": "Update"
+}]]]></anypoint-mq:properties>
+		</anypoint-mq:publish>
+
+	</sub-flow>
+
+	
+	
+	
+	
+	
+	
+	</mule>

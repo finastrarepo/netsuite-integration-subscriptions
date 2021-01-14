@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soapenv:Header>
+      <platformMsgs:documentInfo xmlns:platformMsgs="urn:messages_2020_1.platform.webservices.netsuite.com">
+         <platformMsgs:nsId>WEBSERVICES_3431250_SB2_010720215988721831738778391_8bec6c6c</platformMsgs:nsId>
+      </platformMsgs:documentInfo>
+   </soapenv:Header>
+   <soapenv:Body>
+      <searchResponse xmlns="urn:messages_2020_1.platform.webservices.netsuite.com">
+         <platformCore:searchResult xmlns:platformCore="urn:core_2020_1.platform.webservices.netsuite.com">
+            <platformCore:status isSuccess="true" />
+            <platformCore:totalRecords>9715890</platformCore:totalRecords>
+            <platformCore:pageSize>50</platformCore:pageSize>
+            <platformCore:totalPages>194318</platformCore:totalPages>
+            <platformCore:pageIndex>1</platformCore:pageIndex>
+            <platformCore:searchId>WEBSERVICES_3431250_SB2_010720215988721831738778391_8bec6c6c</platformCore:searchId>
+            <platformCore:searchRowList>
+               <platformCore:searchRow xmlns:setupCustom="urn:customization_2020_1.setup.webservices.netsuite.com">
+                  <setupCustom:basic xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:recType internalId="456" />
+                     <platformCommon:internalId>
+                        <platformCore:searchValue internalId="99448" />
+                     </platformCommon:internalId>
+                     <platformCommon:customFieldList>
+                        <platformCore:customField internalId="3343" scriptId="custrecord_sb_sbitem_tax_code">
+                           <platformCore:searchValue internalId="1802" typeId="-128" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3371" scriptId="custrecord_sb_sbitem_cancellation_type">
+                           <platformCore:searchValue internalId="2" typeId="485" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3351" scriptId="custrecord_sb_sbitem_subscriptionplan">
+                           <platformCore:searchValue internalId="33257" typeId="466" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="4186" scriptId="custrecord_sfdc_contract_asset_id">
+                           <platformCore:searchValue>a1d20000002199NAAQ</platformCore:searchValue>
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3369" scriptId="custrecord_sb_sbitem_location">
+                           <platformCore:searchValue internalId="170" typeId="-103" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3384" scriptId="custrecord_sb_sbitem_status">
+                           <platformCore:searchValue internalId="2" typeId="508" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3349" scriptId="custrecord_sb_sbitem_quantity">
+                           <platformCore:searchValue>1.0</platformCore:searchValue>
+                        </platformCore:customField>
+                     </platformCommon:customFieldList>
+                  </setupCustom:basic>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_term_months" internalId="3378" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:recType internalId="483" />
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="14" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_orig_tran" internalId="3345" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="3876978" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_subscription" internalId="3348" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:recType internalId="472" />
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="15096" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_item" internalId="3347" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:class>
+                           <platformCore:searchValue internalId="114" />
+                        </platformCommon:class>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+               </platformCore:searchRow>
+               <platformCore:searchRow xmlns:setupCustom="urn:customization_2020_1.setup.webservices.netsuite.com">
+                  <setupCustom:basic xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:recType internalId="456" />
+                     <platformCommon:internalId>
+                        <platformCore:searchValue internalId="99448" />
+                     </platformCommon:internalId>
+                     <platformCommon:customFieldList>
+                        <platformCore:customField internalId="3343" scriptId="custrecord_sb_sbitem_tax_code">
+                           <platformCore:searchValue internalId="1802" typeId="-128" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3371" scriptId="custrecord_sb_sbitem_cancellation_type">
+                           <platformCore:searchValue internalId="2" typeId="485" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3351" scriptId="custrecord_sb_sbitem_subscriptionplan">
+                           <platformCore:searchValue internalId="33257" typeId="466" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="4186" scriptId="custrecord_sfdc_contract_asset_id">
+                           <platformCore:searchValue>a1d20000002199NAAQ</platformCore:searchValue>
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3369" scriptId="custrecord_sb_sbitem_location">
+                           <platformCore:searchValue internalId="170" typeId="-103" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3384" scriptId="custrecord_sb_sbitem_status">
+                           <platformCore:searchValue internalId="2" typeId="508" />
+                        </platformCore:customField>
+                        <platformCore:customField internalId="3349" scriptId="custrecord_sb_sbitem_quantity">
+                           <platformCore:searchValue>1.0</platformCore:searchValue>
+                        </platformCore:customField>
+                     </platformCommon:customFieldList>
+                  </setupCustom:basic>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_term_months" internalId="3378" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:recType internalId="483" />
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="14" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_orig_tran" internalId="3345" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="3876978" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_subscription" internalId="3348" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:recType internalId="472" />
+                        <platformCommon:internalId>
+                           <platformCore:searchValue internalId="15096" />
+                        </platformCommon:internalId>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+                  <setupCustom:customSearchJoin xmlns:platformCommon="urn:common_2020_1.platform.webservices.netsuite.com">
+                     <platformCommon:customizationRef scriptId="custrecord_sb_sbitem_item" internalId="3347" />
+                     <platformCommon:searchRowBasic>
+                        <platformCommon:class>
+                           <platformCore:searchValue internalId="114" />
+                        </platformCommon:class>
+                     </platformCommon:searchRowBasic>
+                  </setupCustom:customSearchJoin>
+               </platformCore:searchRow>
+            </platformCore:searchRowList>
+         </platformCore:searchResult>
+      </searchResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

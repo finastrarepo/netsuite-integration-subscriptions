@@ -1,5 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
-  <types:catalog/>
+  <types:catalog>
+    <types:type name="InputPayload" format="xml">
+      <types:example format="xml" element="{http://schemas.xmlsoap.org/soap/envelope/}Envelope" location="examples/temp.xml"/>
+    </types:type>
+  </types:catalog>
   <types:enrichment select="#8578b294-38c2-47ec-8092-b9405eefbff2"/>
+  <types:enrichment select="#d14cb90a-5732-494b-8260-ac1bf7b741bc">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="InputPayload"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>
